@@ -1,7 +1,7 @@
 package main
 
 import (
-  "github.com/Talfaza/testTodo/database"
+  "github.com/Talfaza/bridgehub/database"
   "github.com/joho/godotenv"
   "log"
   "os"
