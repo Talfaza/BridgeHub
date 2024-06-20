@@ -4,7 +4,7 @@
 - **Frontend :** Tailwind,MagicUI, Bulma(eventually)
 - **Backend :** Golang 
 - **API :** -
-- **Database :** PostgreSQL
+- **Database :** Mysql
 ##### TODO (07/06): 
 
 - Create The Basic UI
