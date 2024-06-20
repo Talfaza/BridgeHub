@@ -1,4 +1,4 @@
-module github.com/Talfaza/testTodo
+module github.com/Talfaza/bridgehub
 
 go 1.22.4
 
