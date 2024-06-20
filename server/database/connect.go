@@ -3,8 +3,7 @@ package database
 import (
 	"log"
 	"os"
-
-	"github.com/Talfaza/testTodo/models"
+	"github.com/Talfaza/bridgehub/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
