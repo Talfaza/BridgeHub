@@ -1,12 +1,13 @@
 package controller
 
 import (
-	"log"
 	"regexp"
+	"strconv"
 	"strings"
-
+	"time"
 	"github.com/Talfaza/bridgehub/database"
 	"github.com/Talfaza/bridgehub/models"
+	"github.com/Talfaza/bridgehub/utils"
 	"github.com/gofiber/fiber/v2"
 )
 func mailCheck(email string)bool  {
@@ -74,3 +75,49 @@ func Register(c *fiber.Ctx) error {
 		"message": "Registration successful",
 	})
 }
+
+func Login(c *fiber.Ctx) error  {
+  var data map[string] string
+	var dataUser models.User
+
+	if err := c.BodyParser(&data); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Could not convert the data!",
+			"error":   err.Error(),
+		})
+	}
+  database.DB.Where("email=?",data["email"]).First(&dataUser)
+
+  if dataUser.Id == 0 {
+   return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+			"message": "Email Doesn't exist",
+		})
+
+  }
+  if err:= dataUser.ComparePass(data["password"]);err!=nil{
+    return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Incorrect Password",
+			"error":   err.Error(),
+		})
+  }
+
+  token,err:= utils.GenerateJWT(strconv.Itoa(int(dataUser.Id)))
+  if err != nil {
+  	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Could Not Generate JWT Token",
+			"error":   err.Error(),
+		})}
+
+  cookie:= fiber.Cookie{
+    Name: "jwt",
+    Value: token,
+    Expires: time.Now().Add(time.Hour*24),
+    HTTPOnly: true,
+  }
+  c.Cookie(&cookie) 
+	return c.JSON(fiber.Map{
+		"message": "Login successful",
+    "user":dataUser,
+	})
+}
+
