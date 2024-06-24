@@ -6,7 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-const SecretKey = "secrets"
+const SecretKey = "supermegasecretkey"
 
 func GenerateJWT(issuer string) (string, error) {
 	claim := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
