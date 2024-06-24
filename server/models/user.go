@@ -19,3 +19,4 @@ func (user *User) HashingPass(password string) error {
 	return nil
 }
 
+func (user *User)ComparePass(password string) error{ return bcrypt.CompareHashAndPassword(user.Password,[]byte(password))}
