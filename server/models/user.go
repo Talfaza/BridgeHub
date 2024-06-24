@@ -9,12 +9,13 @@ type User struct {
   Password []byte `json:"-"`
 }
 
-func (user *User) HashingPass(password string) ([]byte, error) {
+
+func (user *User) HashingPass(password string) error {
 	hashedPass, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	user.Password = hashedPass
-	return user.Password, nil
+	return nil
 }
 
