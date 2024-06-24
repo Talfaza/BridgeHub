@@ -9,6 +9,5 @@ func RouteSetup(app *fiber.App)  {
 
   app.Post("/api/register",controller.Register)
 
-
   
 }
