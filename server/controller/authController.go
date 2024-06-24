@@ -1,26 +1,27 @@
 package controller
 
 import (
+	"log"
 	"regexp"
 	"strings"
+
 	"github.com/Talfaza/bridgehub/database"
 	"github.com/Talfaza/bridgehub/models"
 	"github.com/gofiber/fiber/v2"
 )
-
-func mailCheck(email string) bool {
+func mailCheck(email string)bool  {
 	regex := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$`)
-	return regex.MatchString(email)
+
+  return regex.MatchString(email)
 }
 
-// Register handles user registration
 func Register(c *fiber.Ctx) error {
 	var data map[string]interface{}
 	var dataUser models.User
 
 	if err := c.BodyParser(&data); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Could not parse the request body!",
+			"message": "Could not convert the data!",
 			"error":   err.Error(),
 		})
 	}
@@ -55,7 +56,6 @@ func Register(c *fiber.Ctx) error {
 		Email:    email,
 	}
 
-	// Hash password and handle error
 	if err := user.HashingPass(password); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to hash the password",
@@ -63,7 +63,6 @@ func Register(c *fiber.Ctx) error {
 		})
 	}
 
-	// Create user in database
 	if err := database.DB.Create(&user).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Could not create user",
