@@ -23,7 +23,7 @@
 
     - Security: bcrypt: For hashing and comparing passwords .
 
-    - SSH Library: [golang.org/x/crypto/ssh]: A package that provides SSH client functionality, allowing the application to connect to remote servers and execute commands .
+    - SSH Library: [golang.org/x/crypto/ssh](https://golang.org/x/crypto/ssh): A package that provides SSH client functionality, allowing the application to connect to remote servers and execute commands .
 
     - Environment Management: godotenv: A Go package to load environment variables from a .env file.
 
