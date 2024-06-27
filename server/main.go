@@ -7,6 +7,7 @@ import (
 	"github.com/Talfaza/bridgehub/database"
 	"github.com/Talfaza/bridgehub/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -16,15 +17,16 @@ func main() {
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-
-	// Connect to database
 	database.Connect()
 
-	// Get port from environment variable
 	port := os.Getenv("PORT")
 
-	// Create Fiber app
 	app := fiber.New()
+
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "*", // Allow all origins, change this to restrict origins
+		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+	}))
 
 	// Setup routes
 	routes.RouteSetup(app)
