@@ -1,11 +1,11 @@
-import React from 'react';
-import WavyText from './components/magicui/wavy-text';
-import WordFadeIn from './components/magicui/word-fade-in';
-import { DockDemo } from './components/docktest';
+import { Button } from "./components/ui/button"
 function App() {
+
   return (
-      <DockDemo/>
-  );
+    <>
+      <Button>Click me</Button>
+    </>
+  )
 }
 
-export default App;
+export default App
