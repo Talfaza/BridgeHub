@@ -23,10 +23,13 @@ func main() {
 
 	app := fiber.New()
 
-	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*", // Allow all origins, change this to restrict origins
-		AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
-	}))
+app.Use(cors.New(cors.Config{
+    AllowOrigins: "http://localhost:5173", // Replace with your frontend origin
+    AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+    AllowHeaders: "Content-Type, Authorization",
+    AllowCredentials: true, // Enable CORS credentials (cookies)
+}))
+
 
 	// Setup routes
 	routes.RouteSetup(app)

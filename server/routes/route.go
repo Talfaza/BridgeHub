@@ -7,9 +7,10 @@ import (
 )
 
 func RouteSetup(app *fiber.App) {
+
 	app.Post("/api/register", controller.Register)
 	app.Post("/api/login", controller.Login)
   app.Use(middleware.IsAuth)
-	app.Post("/api/execute",controller.ExecuteCommand)  // Protecting this route
+	app.Post("/api/execute",controller.ExecuteCommand)  
 	app.Get("/api/dashboard",controller.Dashboard)      // Dashboard route
 }
