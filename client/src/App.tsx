@@ -1,18 +1,21 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Signup from './components/global/Signup';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './components/global/AuthContext';
 import Login from './components/global/Login';
+import Signup from './components/global/Signup';
 import { Dashboard } from './components/global/Dashboard';
 
 const App: React.FC = () => {
     return (
-        <Router>
-            <Routes>
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-        </Router>
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
     );
 };
 
