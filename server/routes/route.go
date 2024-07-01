@@ -1,16 +1,18 @@
 package routes
 
 import (
-	"github.com/Talfaza/bridgehub/controller"
-	"github.com/Talfaza/bridgehub/middleware"
-	"github.com/gofiber/fiber/v2"
+    "github.com/gofiber/fiber/v2"
+    "github.com/Talfaza/bridgehub/controller"
+    "github.com/Talfaza/bridgehub/middleware"
 )
 
-func RouteSetup(app *fiber.App) {
+func RouteSetup (app *fiber.App) {
+    
+    api := app.Group("/api")
+    api.Post("/register", controller.Register)
+    api.Post("/login", controller.Login)
 
-	app.Post("/api/register", controller.Register)
-	app.Post("/api/login", controller.Login)
-  app.Use(middleware.IsAuth)
-	app.Post("/api/execute",controller.ExecuteCommand)  
-	app.Get("/api/dashboard",controller.Dashboard)      // Dashboard route
+    // Dashboard route with authentication middleware
+    api.Get("/dashboard", middleware.IsAuth, controller.Dashboard)
 }
+

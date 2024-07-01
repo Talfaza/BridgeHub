@@ -1,28 +1,25 @@
 import React, { useEffect } from 'react';
-import { Button } from '../ui/button';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
 
-export const Dashboard: React.FC = () => {
-    const { isLoggedIn } = useAuth();
-    const navigate = useNavigate();
+const Dashboard: React.FC = () => {
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            navigate('/login');
+        if (!token) {
+            window.location.href = '/login'; 
         }
-    }, [isLoggedIn, navigate]);
+    }, [token]);
 
-    if (!isLoggedIn) {
-        return null;     }
+    const handleLogout = () => {
+        localStorage.removeItem('token'); // Remove token from localStorage
+        window.location.href = '/login';     };
 
     return (
         <div>
-            <h1>Hello Dash</h1>
-           
-            <Button variant="outline">Edit Profile</Button>
-           
-            <p>Edit your profile here.</p>
+            <h1>Dashboard</h1>
+            <p>Welcome to the dashboard!</p>
+            <button onClick={handleLogout}>Logout</button>
         </div>
     );
 };
+
+export default Dashboard;

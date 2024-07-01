@@ -7,13 +7,14 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import AlertSignUp from './notifications/AlertSignUp';
 import AlertSignUpError from './notifications/AlertSignupError';
+
 const Signup: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [showAlert, setShowAlert] = useState(false);   
-  const [successMessage, setSuccessMessage] = useState(''); 
+  const [showAlert, setShowAlert] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -32,8 +33,8 @@ const Signup: React.FC = () => {
     } catch (error) {
       setError('Email Already Used. Please use a new one!');
       setTimeout(() => {
-              setError('');
-            }, 3000);
+        setError('');
+      }, 3000);
     }
   };
 
@@ -42,9 +43,7 @@ const Signup: React.FC = () => {
       <div className="text-center text-orange-500 text-3xl font-bold mb-4">
         BridgeHub
       </div>
-      {showAlert && (
-        <AlertSignUp message={successMessage} />
-      )}
+      {showAlert && <AlertSignUp message={successMessage} />}
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="text-center text-2xl">Signup</CardTitle>
@@ -53,9 +52,7 @@ const Signup: React.FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">
-                  Email
-                </Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -66,9 +63,7 @@ const Signup: React.FC = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="username">
-                  Username
-                </Label>
+                <Label htmlFor="username">Username</Label>
                 <Input
                   id="username"
                   type="text"
@@ -79,9 +74,7 @@ const Signup: React.FC = () => {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="password">
-                  Password
-                </Label>
+                <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
@@ -96,10 +89,7 @@ const Signup: React.FC = () => {
               </Button>
             </div>
           </form>
-          {error && (
-            <AlertSignUpError message={error} />
-            
-          )}
+          {error && <AlertSignUpError message={error} />}
           <div className="mt-4 text-center text-sm">
             Already have an account?{' '}
             <a href="/login" className="underline">

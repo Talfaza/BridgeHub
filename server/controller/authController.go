@@ -76,48 +76,51 @@ func Register(c *fiber.Ctx) error {
 	})
 }
 
-func Login(c *fiber.Ctx) error  {
-  var data map[string] string
-	var dataUser models.User
+func Login(c *fiber.Ctx) error {
+    var data map[string]string
+    var dataUser models.User
 
-	if err := c.BodyParser(&data); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Could not convert the data!",
-			"error":   err.Error(),
-		})
-	}
-  database.DB.Where("email=?",data["email"]).First(&dataUser)
+    if err := c.BodyParser(&data); err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "message": "Could not convert the data!",
+            "error":   err.Error(),
+        })
+    }
 
-  if dataUser.Id == 0 {
-   return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
-			"message": "Email Doesn't exist",
-		})
+    database.DB.Where("email = ?", data["email"]).First(&dataUser)
 
-  }
-  if err:= dataUser.ComparePass(data["password"]);err!=nil{
-    return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Incorrect Password",
-			"error":   err.Error(),
-		})
-  }
+    if dataUser.Id == 0 {
+        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+            "message": "Email Doesn't exist",
+        })
+    }
 
-  token,err:= utils.GenerateJWT(strconv.Itoa(int(dataUser.Id)))
-  if err != nil {
-  	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Could Not Generate JWT Token",
-			"error":   err.Error(),
-		})}
+    if err := dataUser.ComparePass(data["password"]); err != nil {
+        return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+            "message": "Incorrect Password",
+            "error":   err.Error(),
+        })
+    }
 
-  cookie:= fiber.Cookie{
-    Name: "jwt",
-    Value: token,
-    Expires: time.Now().Add(time.Hour*24),
-    HTTPOnly: true,
-  }
-  c.Cookie(&cookie) 
-	return c.JSON(fiber.Map{
-		"message": "Login successful",
-    "user":dataUser,
-	})
+    token, err := utils.GenerateJWT(strconv.Itoa(int(dataUser.Id)))
+    if err != nil {
+        return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+            "message": "Could Not Generate JWT Token",
+            "error":   err.Error(),
+        })
+    }
+
+    cookie := fiber.Cookie{
+        Name:     "jwt",
+        Value:    token,
+        Expires:  time.Now().Add(time.Hour * 24),
+        HTTPOnly: true,
+    }
+    c.Cookie(&cookie)
+
+    return c.JSON(fiber.Map{
+        "message": "Login successful",
+        "user":    dataUser,
+        "token":   token,
+    })
 }
-
