@@ -27,7 +27,7 @@ func ClaimParsing(cookie string) (string, error) {
 
 	claims, ok := token.Claims.(*jwt.StandardClaims)
 	if !ok {
-		return "", err 
+		return "", err
 	}
 
 	return claims.Issuer, nil

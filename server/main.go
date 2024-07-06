@@ -7,6 +7,7 @@ import (
 	"github.com/Talfaza/bridgehub/database"
 	"github.com/Talfaza/bridgehub/routes"
 	"github.com/gofiber/fiber/v2"
+  "github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 )
 
@@ -23,9 +24,13 @@ func main() {
 	// Get port from environment variable
 	port := os.Getenv("PORT")
 
-	// Create Fiber app
 	app := fiber.New()
-
+  app.Use(cors.New(cors.Config{
+          AllowOrigins: "http://localhost:5173", 
+          AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+          AllowHeaders: "Content-Type, Authorization",
+          AllowCredentials: true, // Enable CORS credentials (cookies)
+      }))
 	// Setup routes
 	routes.RouteSetup(app)
 

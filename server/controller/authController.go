@@ -5,9 +5,11 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
 	"github.com/Talfaza/bridgehub/database"
 	"github.com/Talfaza/bridgehub/models"
 	"github.com/Talfaza/bridgehub/utils"
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
 )
 func mailCheck(email string)bool  {
@@ -120,4 +122,7 @@ func Login(c *fiber.Ctx) error  {
     "user":dataUser,
 	})
 }
+  type Claims struct {
+    jwt.StandardClaims
+  }
 

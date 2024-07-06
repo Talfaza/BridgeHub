@@ -29,7 +29,7 @@ func Connect() {
 
 	DB = database
 
-	err = DB.AutoMigrate(&models.User{})
+	err = DB.AutoMigrate(&models.User{},&models.Server{})
 	if err != nil {
 		log.Fatalf("Error migrating database: %v", err)
 	}

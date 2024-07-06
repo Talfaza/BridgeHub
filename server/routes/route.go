@@ -13,5 +13,7 @@ func RouteSetup(app *fiber.App)  {
   //user will not acces any route under this line if he is not authentificated
   app.Use(middleware.IsAuth) 
   app.Post("/api/execute", controller.ExecuteCommand)
+  app.Post("api/addserver",controller.AddServer)
+	app.Get("/api/getservers", controller.GetUserServers)
   
 }
