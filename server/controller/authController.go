@@ -47,7 +47,7 @@ func Register(c *fiber.Ctx) error {
 
 	// Check if email is already used
 	database.DB.Where("email = ?", strings.TrimSpace(email)).First(&dataUser)
-	if dataUser.Id != 0 {
+	if dataUser.ID != 0 {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Email already used",
 		})
@@ -59,7 +59,8 @@ func Register(c *fiber.Ctx) error {
 		Email:    email,
 	}
 
-	if err := user.HashingPass(password); err != nil {
+	if err := user.HashPassword(password); err != nil {
+
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Failed to hash the password",
 			"error":   err.Error(),
@@ -90,20 +91,20 @@ func Login(c *fiber.Ctx) error  {
 	}
   database.DB.Where("email=?",data["email"]).First(&dataUser)
 
-  if dataUser.Id == 0 {
+  if dataUser.ID == 0 {
    return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
 			"message": "Email Doesn't exist",
 		})
 
   }
-  if err:= dataUser.ComparePass(data["password"]);err!=nil{
+  if err:= dataUser.ComparePassword(data["password"]);err!=nil{
     return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"message": "Incorrect Password",
 			"error":   err.Error(),
 		})
   }
 
-  token,err:= utils.GenerateJWT(strconv.Itoa(int(dataUser.Id)))
+  token,err:= utils.GenerateJWT(strconv.Itoa(int(dataUser.ID)))
   if err != nil {
   	return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"message": "Could Not Generate JWT Token",
@@ -122,9 +123,9 @@ func Login(c *fiber.Ctx) error  {
 	return c.JSON(fiber.Map{
 		"message": "Login successful",
     "user":dataUser,
+    "token":token,
 	})
 }
   type Claims struct {
     jwt.StandardClaims
   }
-

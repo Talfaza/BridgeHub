@@ -11,14 +11,14 @@ const SecretKey = "supermegasecretkey"
 func GenerateJWT(issuer string) (string, error) {
 	claim := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    issuer,
-		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(), // Expires after 24h
+		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
 	})
 
 	return claim.SignedString([]byte(SecretKey))
 }
 
-func ClaimParsing(cookie string) (string, error) {
-	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
+func ParseJWT(tokenStr string) (string, error) {
+	token, err := jwt.ParseWithClaims(tokenStr, &jwt.StandardClaims{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(SecretKey), nil
 	})
 	if err != nil || !token.Valid {

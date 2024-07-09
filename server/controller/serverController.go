@@ -1,49 +1,54 @@
 package controller
 
 import (
-  "github.com/gofiber/fiber/v2"
+	"strconv"
+
 	"github.com/Talfaza/bridgehub/database"
 	"github.com/Talfaza/bridgehub/models"
-	"github.com/Talfaza/bridgehub/utils"
+	"github.com/gofiber/fiber/v2"
 )
 
-
-func AddServer(c *fiber.Ctx) error  {
-  var server  models.Server  
-if err := c.BodyParser(&server); err != nil {
+func AddServer(c *fiber.Ctx) error {
+	var server models.Server
+	if err := c.BodyParser(&server); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Could not convert the data!",
-			"error":   err.Error(),
+			"message": "Invalid input",
 		})
 	}
+
+	userIDStr := c.Locals("userID").(string)
+	userID, err := strconv.ParseUint(userIDStr, 10, 32)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to parse user ID",
+		})
+	}
+	server.UserID = uint(userID)
+
 	if err := database.DB.Create(&server).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Could not create server invalid payload",
-			"error":   err.Error(),
+			"message": "Failed to add server",
 		})
 	}
 
 	return c.JSON(fiber.Map{
-		"message": "Server Added Succesfully !",
+		"message": "Server added successfully",
 	})
-
 }
 
-
-func GetUserServers(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-	userId, err := utils.ClaimParsing(cookie)
+func GetServers(c *fiber.Ctx) error {
+	userIDStr := c.Locals("userID").(string)
+	userID, err := strconv.ParseUint(userIDStr, 10, 32)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "Not Logged In",
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to parse user ID",
 		})
 	}
 
 	var servers []models.Server
-	if err := database.DB.Where("user_id = ?", userId).Find(&servers).Error; err != nil {
+	if err := database.DB.Where("user_id = ?", userID).Find(&servers).Error; err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": "Could not retrieve servers",
-			"error":   err.Error(),
+			"message": "Failed to retrieve servers",
 		})
 	}
 

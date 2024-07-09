@@ -1,21 +1,18 @@
 package middleware
 
 import (
-	"github.com/gofiber/fiber/v2"
 	"github.com/Talfaza/bridgehub/utils"
-	"log"
+	"github.com/gofiber/fiber/v2"
 )
 
-func IsAuth(c *fiber.Ctx) error {
+func IsAuthenticated(c *fiber.Ctx) error {
 	cookie := c.Cookies("jwt")
-	log.Println("JWT Cookie:", cookie)
-	userId, err := utils.ClaimParsing(cookie)
+	userID, err := utils.ParseJWT(cookie)
 	if err != nil {
-		log.Println("Error parsing JWT:", err)
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": "Not Logged In",
+			"message": "Not logged in",
 		})
 	}
-	log.Println("Authenticated user ID:", userId)
+	c.Locals("userID", userID)
 	return c.Next()
 }
