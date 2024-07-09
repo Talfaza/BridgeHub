@@ -20,9 +20,10 @@ export function Dashboard() {
   const [hostname, setHostname] = useState("");
   const [ip, setIp] = useState("");
   const [password, setPassword] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const handleAddServer = async () => {
     try {
+    setLoading(true);
       const response = await axios.post(
         "http://localhost:3000/api/addserver",
         {
@@ -44,6 +45,7 @@ export function Dashboard() {
         setHostname("");
         setIp("");
         setPassword("");
+        setLoading(false);
       } else {
         console.error("Failed to add server");
       }
@@ -119,7 +121,9 @@ export function Dashboard() {
                         className="text-white"
                       />
 
-                      <Button onClick={handleAddServer}>Add Server</Button>
+                    <Button onClick={handleAddServer} disabled={loading}>
+                      {loading ? 'Adding Server...' : 'Add Server !'}
+                    </Button>
                     </div>
                   </DialogDescription>
                 </DialogHeader>

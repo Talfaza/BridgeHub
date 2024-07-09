@@ -15,9 +15,11 @@ import { Label } from "@/components/ui/label";
 export function LoginCard() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
+    setLoading(true);
       const response = await axios.post('http://localhost:3000/api/login', {
         email,
         password,
@@ -28,6 +30,7 @@ export function LoginCard() {
 
         localStorage.setItem('userId', response.data.user.id);
 
+      setLoading(false);
         navigate('/dashboard');
       } else {
         console.log('Login failed. Please check your credentials.');
@@ -61,7 +64,9 @@ export function LoginCard() {
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleLogin}>Login !</Button>
+        <Button onClick={handleLogin} disabled={loading}>
+          {loading ? 'Login...' : 'Login !'}
+        </Button>
       </CardFooter>
     </Card>
   );
