@@ -16,13 +16,11 @@ import { Button } from "@/components/ui/button";
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
 export function Dashboard() {
-  // State variables for form inputs
   const [name, setName] = useState("");
   const [hostname, setHostname] = useState("");
   const [ip, setIp] = useState("");
   const [password, setPassword] = useState("");
 
-  // Function to handle form submission
   const handleAddServer = async () => {
     try {
       const response = await axios.post(
@@ -42,7 +40,6 @@ export function Dashboard() {
 
       if (response.status === 200) {
         console.log("Server added successfully:", response.data);
-        // Optionally reset form fields
         setName("");
         setHostname("");
         setIp("");
