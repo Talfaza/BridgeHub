@@ -129,3 +129,16 @@ func Login(c *fiber.Ctx) error  {
   type Claims struct {
     jwt.StandardClaims
   }
+func LogoutUser(c *fiber.Ctx) error {
+
+	c.Cookie(&fiber.Cookie{
+		Name:     "jwt",
+		Value:    "",
+		Expires:  time.Now().Add(-time.Hour),
+		HTTPOnly: true,
+	})
+
+	return c.Status(fiber.StatusOK).JSON(fiber.Map{
+		"message": "Logged out successfully",
+	})
+}

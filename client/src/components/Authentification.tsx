@@ -1,4 +1,4 @@
-import { LoginCard } from "./LoginCard";
+import { LoginCard } from "./LoginCard"
 import { SignupCard } from "./SignupCard";
 import {
   Tabs,

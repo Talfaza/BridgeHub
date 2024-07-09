@@ -12,6 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -21,21 +22,23 @@ export function Dashboard() {
   const [ip, setIp] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const handleAddServer = async () => {
     try {
-    setLoading(true);
+      setLoading(true);
       const response = await axios.post(
         "http://localhost:3000/api/addserver",
         {
           name,
           hostname,
-          ip,
+          ipaddress: ip,
           password,
         },
         {
           headers: {
             "Content-Type": "application/json",
           },
+          withCredentials: true,
         }
       );
 
@@ -45,12 +48,34 @@ export function Dashboard() {
         setHostname("");
         setIp("");
         setPassword("");
-        setLoading(false);
       } else {
         console.error("Failed to add server");
       }
     } catch (error) {
       console.error("Error adding server:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/logout",
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Logged out successfully");
+        navigate('/authentification')
+      } else {
+        console.error("Failed to log out");
+      }
+    } catch (error) {
+      console.error("Error logging out:", error);
     }
   };
 
@@ -121,9 +146,9 @@ export function Dashboard() {
                         className="text-white"
                       />
 
-                    <Button onClick={handleAddServer} disabled={loading}>
-                      {loading ? 'Adding Server...' : 'Add Server !'}
-                    </Button>
+                      <Button onClick={handleAddServer} disabled={loading}>
+                        {loading ? 'Adding Server...' : 'Add Server !'}
+                      </Button>
                     </div>
                   </DialogDescription>
                 </DialogHeader>
@@ -137,7 +162,9 @@ export function Dashboard() {
             <Icons.manage className="h-6 w-6" />
           </DockIcon>
           <DockIcon>
-            <Icons.logout className="h-6 w-6" />
+            <button onClick={handleLogout}>
+              <Icons.logout className="h-6 w-6" />
+            </button>
           </DockIcon>
         </Dock>
       </div>
