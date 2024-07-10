@@ -15,4 +15,5 @@ func RouteSetup(app *fiber.App) {
 	app.Post("/api/addserver", controller.AddServer)
 	app.Get("/api/getservers", controller.GetServers)
 	app.Post("/api/execute", controller.ExecuteCommand)
+  app.Delete("/api/deleteserver/:id", controller.DeleteServer)
 }

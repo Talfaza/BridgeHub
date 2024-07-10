@@ -56,3 +56,23 @@ func GetServers(c *fiber.Ctx) error {
 		"servers": servers,
 	})
 }
+
+func DeleteServer(c *fiber.Ctx) error {
+	serverIDStr := c.Params("id")
+	serverID, err := strconv.ParseUint(serverIDStr, 10, 32)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
+			"message": "Invalid server ID",
+		})
+	}
+
+	if err := database.DB.Delete(&models.Server{}, serverID).Error; err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"message": "Failed to delete server",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Server deleted successfully",
+	})
+}
