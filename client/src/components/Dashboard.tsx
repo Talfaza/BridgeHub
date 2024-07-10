@@ -19,7 +19,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
-import { ServerCard } from "./ServerCard";
+import { AddServerSucces } from "./notifications/ServerCardNotification";
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
 export function Dashboard() {
@@ -28,6 +28,7 @@ export function Dashboard() {
   const [ip, setIp] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false); 
   const navigate = useNavigate();
 
@@ -56,6 +57,10 @@ export function Dashboard() {
         setHostname("");
         setIp("");
         setPassword("");
+        setShowSuccessAlert(true);
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+        }, 3000); // Hide the alert after 3 seconds
       } else {
         console.error("Failed to add server");
       }
@@ -188,6 +193,7 @@ export function Dashboard() {
           </DockIcon>
         </Dock>
       </div>
+      {showSuccessAlert && <AddServerSucces />}
       {showLogoutAlert && (
         <Alert className="fixed top-4 right-4 max-w-xs p-4 flex items-center">
           <CheckCircledIcon className="h-4 w-4 mr-2" />
