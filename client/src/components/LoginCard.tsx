@@ -35,19 +35,19 @@ export function LoginCard({ setLoginSuccess, setLoginError }: { setLoginSuccess:
 
         setTimeout(() => {
           navigate('/dashboard');
-        }, 3000); // Redirect after 3 seconds
+        }, 3000);
       } else {
         setLoginError(true);
         setTimeout(() => {
           setLoginError(false);
-        }, 3000); // Hide error after 3 seconds
+        }, 3000); 
         console.log('Login failed. Please check your credentials.');
       }
     } catch (error) {
       setLoginError(true);
       setTimeout(() => {
         setLoginError(false);
-      }, 3000); // Hide error after 3 seconds
+      }, 3000); 
       console.error('Login error:', error);
     } finally {
       setLoading(false);

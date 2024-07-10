@@ -40,20 +40,20 @@ export function SignupCard({
       setSignupSuccess(true);
       setTimeout(() => {
         setSignupSuccess(false);
-      }, 3000); // Hide success after 3 seconds
+      }, 3000); 
 
       setUsername('');
       setEmail('');
       setPassword('');
 
-      onSignupSuccess(); // Change tab to login
+      onSignupSuccess(); 
     } catch (error) {
       console.error('Signup error:', error);
 
       setSignupError(true);
       setTimeout(() => {
         setSignupError(false);
-      }, 3000); // Hide error after 3 seconds
+      }, 3000); 
     } finally {
       setLoading(false);
     }
