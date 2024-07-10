@@ -2,7 +2,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
-import { LoginSucces } from './notifications/login/LoginSuccess';
 import {
   Card,
   CardContent,
@@ -13,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function LoginCard() {
+export function LoginCard({ setLoginSuccess, setLoginError }: { setLoginSuccess: (success: boolean) => void, setLoginError: (error: boolean) => void }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,6 +20,7 @@ export function LoginCard() {
 
   const handleLogin = async () => {
     setLoading(true);
+    try {
       const response = await axios.post('http://localhost:3000/api/login', {
         email,
         password,
@@ -28,15 +28,30 @@ export function LoginCard() {
 
       if (response.data.message === 'Login successful') {
         document.cookie = `jwt=${response.data.token}`;
-
         localStorage.setItem('userId', response.data.user.id);
 
-      setLoading(false);
-        
-        navigate('/dashboard');
+        setLoading(false);
+        setLoginSuccess(true);
+
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 3000); // Redirect after 3 seconds
       } else {
+        setLoginError(true);
+        setTimeout(() => {
+          setLoginError(false);
+        }, 3000); // Hide error after 3 seconds
         console.log('Login failed. Please check your credentials.');
       }
+    } catch (error) {
+      setLoginError(true);
+      setTimeout(() => {
+        setLoginError(false);
+      }, 3000); // Hide error after 3 seconds
+      console.error('Login error:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
