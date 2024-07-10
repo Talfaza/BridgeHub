@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { LoginSucces } from './notifications/login/LoginSuccess';
 import {
   Card,
   CardContent,
@@ -31,6 +32,7 @@ export function LoginCard() {
         localStorage.setItem('userId', response.data.user.id);
 
       setLoading(false);
+        
         navigate('/dashboard');
       } else {
         console.log('Login failed. Please check your credentials.');
