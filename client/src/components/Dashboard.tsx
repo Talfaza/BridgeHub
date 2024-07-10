@@ -19,7 +19,7 @@ import {
   AlertDescription,
   AlertTitle,
 } from "@/components/ui/alert";
-
+import { ServerCard } from "./ServerCard";
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
 export function Dashboard() {
@@ -174,7 +174,9 @@ export function Dashboard() {
             </Dialog>
           </DockIcon>
           <DockIcon>
-            <Icons.servers className="h-6 w-6" />
+            <button onClick={() => navigate("/servers")}>
+              <Icons.servers className="h-6 w-6" />
+            </button>
           </DockIcon>
           <DockIcon>
             <Icons.manage className="h-6 w-6" />
