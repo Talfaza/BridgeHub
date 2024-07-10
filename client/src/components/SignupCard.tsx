@@ -11,16 +11,22 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export function SignupCard() {
+export function SignupCard({
+  setSignupSuccess,
+  setSignupError,
+  onSignupSuccess,
+}: {
+  setSignupSuccess: (success: boolean) => void,
+  setSignupError: (error: boolean) => void,
+  onSignupSuccess: () => void,
+}) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
 
   const handleSignup = async () => {
     setLoading(true);
-    setError('');
 
     try {
       const response = await axios.post('http://localhost:3000/api/register', {
@@ -31,14 +37,23 @@ export function SignupCard() {
 
       console.log('Signup successful!', response.data);
 
+      setSignupSuccess(true);
+      setTimeout(() => {
+        setSignupSuccess(false);
+      }, 3000); // Hide success after 3 seconds
+
       setUsername('');
       setEmail('');
       setPassword('');
-      
+
+      onSignupSuccess(); // Change tab to login
     } catch (error) {
       console.error('Signup error:', error);
 
-      setError('Signup failed. Please try again.');
+      setSignupError(true);
+      setTimeout(() => {
+        setSignupError(false);
+      }, 3000); // Hide error after 3 seconds
     } finally {
       setLoading(false);
     }
@@ -79,7 +94,6 @@ export function SignupCard() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {error && <p className="text-red-600">{error}</p>}
       </CardContent>
       <CardFooter>
         <Button onClick={handleSignup} disabled={loading}>
