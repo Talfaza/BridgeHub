@@ -70,7 +70,7 @@ export function Dashboard() {
 
       if (response.status === 200) {
         console.log("Logged out successfully");
-        navigate('/authentification')
+        navigate('/')
       } else {
         console.error("Failed to log out");
       }
