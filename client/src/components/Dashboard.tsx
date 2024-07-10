@@ -97,7 +97,8 @@ export function Dashboard() {
                 <DialogHeader>
                   <DialogTitle>Add Server:</DialogTitle>
                   <DialogDescription>
-                    <div className="space-y-4">
+                      <br/>
+                    <div className="space-y-1">
                       <Label htmlFor="name" className="text-white">
                         Name:
                       </Label>
@@ -109,6 +110,7 @@ export function Dashboard() {
                         onChange={(e) => setName(e.target.value)}
                         className="text-white"
                       />
+                      <br/>
 
                       <Label htmlFor="hostname" className="text-white">
                         Hostname:
@@ -122,6 +124,9 @@ export function Dashboard() {
                         className="text-white"
                       />
 
+                      <br/>
+
+
                       <Label htmlFor="ip" className="text-white">
                         IP Address:
                       </Label>
@@ -134,6 +139,7 @@ export function Dashboard() {
                         className="text-white"
                       />
 
+                      <br/>
                       <Label htmlFor="password" className="text-white">
                         Password:
                       </Label>
@@ -145,6 +151,8 @@ export function Dashboard() {
                         onChange={(e) => setPassword(e.target.value)}
                         className="text-white"
                       />
+
+                      <br/>
 
                       <Button onClick={handleAddServer} disabled={loading}>
                         {loading ? 'Adding Server...' : 'Add Server !'}
