@@ -13,6 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -22,7 +28,9 @@ export function Dashboard() {
   const [ip, setIp] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false); 
   const navigate = useNavigate();
+
   const handleAddServer = async () => {
     try {
       setLoading(true);
@@ -70,7 +78,10 @@ export function Dashboard() {
 
       if (response.status === 200) {
         console.log("Logged out successfully");
-        navigate('/')
+        setShowLogoutAlert(true);
+        setTimeout(() => {
+          navigate('/');
+        }, 3000); 
       } else {
         console.error("Failed to log out");
       }
@@ -97,7 +108,7 @@ export function Dashboard() {
                 <DialogHeader>
                   <DialogTitle>Add Server:</DialogTitle>
                   <DialogDescription>
-                      <br/>
+                    <br />
                     <div className="space-y-1">
                       <Label htmlFor="name" className="text-white">
                         Name:
@@ -110,7 +121,7 @@ export function Dashboard() {
                         onChange={(e) => setName(e.target.value)}
                         className="text-white"
                       />
-                      <br/>
+                      <br />
 
                       <Label htmlFor="hostname" className="text-white">
                         Hostname:
@@ -124,8 +135,7 @@ export function Dashboard() {
                         className="text-white"
                       />
 
-                      <br/>
-
+                      <br />
 
                       <Label htmlFor="ip" className="text-white">
                         IP Address:
@@ -139,7 +149,7 @@ export function Dashboard() {
                         className="text-white"
                       />
 
-                      <br/>
+                      <br />
                       <Label htmlFor="password" className="text-white">
                         Password:
                       </Label>
@@ -152,10 +162,10 @@ export function Dashboard() {
                         className="text-white"
                       />
 
-                      <br/>
+                      <br />
 
                       <Button onClick={handleAddServer} disabled={loading}>
-                        {loading ? 'Adding Server...' : 'Add Server !'}
+                        {loading ? "Adding Server..." : "Add Server !"}
                       </Button>
                     </div>
                   </DialogDescription>
@@ -176,6 +186,15 @@ export function Dashboard() {
           </DockIcon>
         </Dock>
       </div>
+      {showLogoutAlert && (
+        <Alert className="fixed top-4 right-4 max-w-xs p-4 flex items-center">
+          <CheckCircledIcon className="h-4 w-4 mr-2" />
+          <div>
+            <AlertTitle className="font-semibold text-sm">Logout :</AlertTitle>
+            <AlertDescription className="text-xs">You Will Be Redirected !</AlertDescription>
+          </div>
+        </Alert>
+      )}
     </div>
   );
 }
