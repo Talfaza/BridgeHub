@@ -186,7 +186,9 @@ export function Dashboard() {
             </button>
           </DockIcon>
           <DockIcon>
-            <CommandsManage />
+          <button onClick={() => <CommandsManage />}>
+              <Icons.manage className="h-6 w-6" />
+            </button>
 
           </DockIcon>
           <DockIcon>
