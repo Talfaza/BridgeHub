@@ -18,10 +18,8 @@ interface DialogMkdirProps {
 }
 
 export function DialogMkdir({ open, setOpen, onCancel }: DialogMkdirProps) {
-  const [directoryName, setDirectoryName] = useState("");
 
   const handleCreate = () => {
-    console.log("Directory Name:", directoryName);
     setOpen(false);
   };
 
@@ -39,8 +37,6 @@ export function DialogMkdir({ open, setOpen, onCancel }: DialogMkdirProps) {
           <Input
             id="directoryName"
             placeholder="Directory Name"
-            value={directoryName}
-            onChange={(e) => setDirectoryName(e.target.value)}
           />
         </div>
         <AlertDialogFooter>
