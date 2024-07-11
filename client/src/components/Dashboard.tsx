@@ -20,6 +20,8 @@ import {
   AlertTitle,
 } from "@/components/ui/alert";
 import { AddServerSucces } from "./notifications/ServerCardNotification";
+import { CommandsManage } from "./CommandsManage";
+
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
 export function Dashboard() {
@@ -60,7 +62,7 @@ export function Dashboard() {
         setShowSuccessAlert(true);
         setTimeout(() => {
           setShowSuccessAlert(false);
-        }, 3000); // Hide the alert after 3 seconds
+        }, 3000); 
       } else {
         console.error("Failed to add server");
       }
@@ -184,7 +186,8 @@ export function Dashboard() {
             </button>
           </DockIcon>
           <DockIcon>
-            <Icons.manage className="h-6 w-6" />
+            <CommandsManage />
+
           </DockIcon>
           <DockIcon>
             <button onClick={handleLogout}>
