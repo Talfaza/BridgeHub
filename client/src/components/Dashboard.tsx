@@ -31,7 +31,8 @@ export function Dashboard() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
-  const [showLogoutAlert, setShowLogoutAlert] = useState(false); 
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+  const [showCommands, setShowCommands] = useState(false); 
   const navigate = useNavigate();
 
   const handleAddServer = async () => {
@@ -62,7 +63,7 @@ export function Dashboard() {
         setShowSuccessAlert(true);
         setTimeout(() => {
           setShowSuccessAlert(false);
-        }, 3000); 
+        }, 3000);
       } else {
         console.error("Failed to add server");
       }
@@ -186,11 +187,10 @@ export function Dashboard() {
             </button>
           </DockIcon>
           <DockIcon>
-          <button onClick={() => <CommandsManage />}>
-              <Icons.manage className="h-6 w-6" />
-            </button>
-
-          </DockIcon>
+        <button onClick={() => setShowCommands(prev => !prev)}>
+          <Icons.manage className="h-6 w-6" />
+        </button>
+      </DockIcon>
           <DockIcon>
             <button onClick={handleLogout}>
               <Icons.logout className="h-6 w-6" />
@@ -208,6 +208,7 @@ export function Dashboard() {
           </div>
         </Alert>
       )}
+      {showCommands && <CommandsManage />}
     </div>
   );
 }
