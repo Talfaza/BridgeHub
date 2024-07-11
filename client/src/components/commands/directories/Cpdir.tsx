@@ -9,21 +9,17 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-// Component definition
-interface DialogMkdirProps {
+interface DialogCpdirProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onCancel: () => void;
 }
 
-export function DialogMkdir({ open, setOpen, onCancel }: DialogMkdirProps) {
-  const [directoryName, setDirectoryName] = useState("");
+export function DialogCpdir({ open, setOpen, onCancel }: DialogCpdirProps) {
 
   const handleCreate = () => {
-    console.log("Directory Name:", directoryName);
     setOpen(false);
   };
 
@@ -31,17 +27,23 @@ export function DialogMkdir({ open, setOpen, onCancel }: DialogMkdirProps) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Create a New Directory</AlertDialogTitle>
+          <AlertDialogTitle> Copy a Directory</AlertDialogTitle>
           <AlertDialogDescription>
-            Please enter the name of the directory you want to create.
+            Please enter the source and destination directories.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <div className="space-y-2">
-          <Label htmlFor="directoryName">Directory Name:</Label>
+          <Label htmlFor="sourcedirectoryName"> Source Directory Name:</Label>
           <Input
-            id="directoryName"
-            value={directoryName}
-            onChange={(e) => setDirectoryName(e.target.value)}
+            id="sourcedirectoryName"
+            placeholder="Source"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="destdirectoryName"> Destination Directory Name:</Label>
+          <Input
+            id="destdirectoryName"
+            placeholder="Destination"
           />
         </div>
         <AlertDialogFooter>
@@ -49,7 +51,7 @@ export function DialogMkdir({ open, setOpen, onCancel }: DialogMkdirProps) {
             Cancel
           </Button>
           <Button  onClick={handleCreate}>
-            Create
+           Copy 
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

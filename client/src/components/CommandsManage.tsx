@@ -23,7 +23,8 @@ import {
   CommandSeparator,
 } from "@/components/ui/command";
 
-import { DialogMkdir } from "./commands/Mkdir";
+import { DialogMkdir } from "./commands/directories/Mkdir";
+import { DialogCpdir } from "./commands/directories/Cpdir";
 export function CommandsManage() {
   const [open, setOpen] = useState(true);
   const [dialogType, setDialogType] = useState<string | null>(null);
@@ -46,6 +47,12 @@ export function CommandsManage() {
         return (
           <DialogMkdir open={true} setOpen={setOpen} onCancel={handleCancel} />
         );
+      case "Copy A Directory":
+        return (
+          <DialogCpdir open={true} setOpen={setOpen} onCancel={handleCancel} />
+
+
+      )
       // Add cases for other dialog components here
       default:
         return null;
