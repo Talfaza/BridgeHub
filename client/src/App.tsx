@@ -11,8 +11,6 @@ function App() {
         <Routes>
 
           <Route path="/" element={<Authentification/>} />
-          <Route path="/tests" element={<CommandsManage/>} />
-          <Route path="/tests/mkdir" element={<DialogMkdir/>} />
           <Route path="/servers" element={<ServerCard/>} />
           <Route path="/dashboard" element={<Dashboard/>} />
         </Routes>
