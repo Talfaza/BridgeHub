@@ -1,29 +1,29 @@
 package controller
 
 import (
+    "github.com/Talfaza/bridgehub/database"
+    "github.com/Talfaza/bridgehub/models"
     "golang.org/x/crypto/ssh"
     "github.com/gofiber/fiber/v2"
     "time"
 )
 
 type SSHRequest struct {
-    IP       string `json:"ip"`
-    Username string `json:"username"`
-    Password string `json:"password"`
+    ServerID uint   `json:"server_id"`
     Command  string `json:"command"`
 }
 
-func executeSSHCommand(ip, username, password, command string) (string, error) {
+func executeSSHCommand(server models.Server, command string) (string, error) {
     config := &ssh.ClientConfig{
-        User: username,
+        User: server.Hostname,
         Auth: []ssh.AuthMethod{
-            ssh.Password(password),
+            ssh.Password(server.Password),
         },
         HostKeyCallback: ssh.InsecureIgnoreHostKey(),
         Timeout:         5 * time.Second,
     }
 
-    conn, err := ssh.Dial("tcp", ip+":22", config)
+    conn, err := ssh.Dial("tcp", server.IPAddress+":22", config)
     if err != nil {
         return "", err
     }
@@ -52,7 +52,15 @@ func ExecuteCommand(c *fiber.Ctx) error {
         })
     }
 
-    output, err := executeSSHCommand(request.IP, request.Username, request.Password, request.Command)
+    var server models.Server
+    if err := database.DB.First(&server, request.ServerID).Error; err != nil {
+        return c.Status(fiber.StatusNotFound).JSON(fiber.Map{
+            "message": "Server not found",
+            "error":   err.Error(),
+        })
+    }
+
+    output, err := executeSSHCommand(server, request.Command)
     if err != nil {
         return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
             "message": "Failed to execute command",
