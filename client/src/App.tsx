@@ -2,8 +2,6 @@ import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
 import { Dashboard } from "./components/Dashboard";
 import { Authentification } from './components/Authentification';
 import { ServerCard } from './components/ServerCard'; 
-import { CommandsManage } from './components/CommandsManage';
-import { DialogMkdir } from './components/commands/Mkdir'; 
 function App() {
   return (
    <Router>
