@@ -27,6 +27,13 @@ import { DialogMkdir } from "./commands/directories/Mkdir";
 import { DialogCpdir } from "./commands/directories/Cpdir";
 import { DialogRmdir } from "./commands/directories/Rmdir";
 import { DialogMvDir } from "./commands/directories/Mvdir";
+import { DialogMkfile } from "./commands/files/Mkfile";
+import { DialogRmfile } from "./commands/files/Rmfile";
+import { DialogCpfile } from "./commands/files/Cpfile";
+import { DialogMvfile } from "./commands/files/Mvfile";
+import { DialogCompress } from "./commands/files/Compress";
+import { DialogDecompress } from "./commands/files/Decompress";
+
 export function CommandsManage() {
   const [open, setOpen] = useState(true);
   const [dialogType, setDialogType] = useState<string | null>(null);
@@ -52,15 +59,39 @@ export function CommandsManage() {
       case "Copy A Directory":
         return (
           <DialogCpdir open={true} setOpen={setOpen} onCancel={handleCancel} />
-      );
+        );
       case "Delete A Directory":
         return (
           <DialogRmdir open={true} setOpen={setOpen} onCancel={handleCancel} />
-      );
+        );
       case "Move A Directory":
         return (
           <DialogMvDir open={true} setOpen={setOpen} onCancel={handleCancel} />
-      );
+        );
+      case "Create A File":
+        return (
+          <DialogMkfile open={true} setOpen={setOpen} onCancel={handleCancel} />
+        );
+      case "Delete A File":
+        return (
+          <DialogRmfile open={true} setOpen={setOpen} onCancel={handleCancel} />
+        );
+      case "Copy A File":
+        return (
+          <DialogCpfile open={true} setOpen={setOpen} onCancel={handleCancel} />
+        );
+      case "Move A File":
+        return (
+          <DialogMvfile open={true} setOpen={setOpen} onCancel={handleCancel} />
+        );
+      case "Compress A File":
+        return (
+          <DialogCompress open={true} setOpen={setOpen} onCancel={handleCancel} />
+        );
+      case "Decompress A File":
+        return (
+          <DialogDecompress open={true} setOpen={setOpen} onCancel={handleCancel} />
+        );
       default:
         return null;
     }
@@ -117,18 +148,6 @@ export function CommandsManage() {
               <span>Decompress A File</span>
             </CommandItem>
           </CommandGroup>
-          <CommandSeparator />
-          <CommandGroup heading="Permission">
-            <CommandItem onSelect={() => handleSelect("Change Permissions")}>
-              <Pencil1Icon className="mr-2 h-4 w-4" />
-              <span>Change Permissions</span>
-            </CommandItem>
-            <CommandItem onSelect={() => handleSelect("Change Ownership")}>
-              <PersonIcon className="mr-2 h-4 w-4" />
-              <span>Change Ownership</span>
-            </CommandItem>
-          </CommandGroup>
-          <CommandSeparator />
         </CommandList>
       </CommandDialog>
       {renderDialog()}
