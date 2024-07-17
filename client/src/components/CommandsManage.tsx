@@ -26,6 +26,7 @@ import {
 import { DialogMkdir } from "./commands/directories/Mkdir";
 import { DialogCpdir } from "./commands/directories/Cpdir";
 import { DialogRmdir } from "./commands/directories/Rmdir";
+import { DialogMvDir } from "./commands/directories/Mvdir";
 export function CommandsManage() {
   const [open, setOpen] = useState(true);
   const [dialogType, setDialogType] = useState<string | null>(null);
@@ -55,6 +56,10 @@ export function CommandsManage() {
       case "Delete A Directory":
         return (
           <DialogRmdir open={true} setOpen={setOpen} onCancel={handleCancel} />
+      );
+      case "Move A Directory":
+        return (
+          <DialogMvDir open={true} setOpen={setOpen} onCancel={handleCancel} />
       );
       default:
         return null;
