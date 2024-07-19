@@ -10,10 +10,10 @@ func RouteSetup(app *fiber.App) {
 	app.Post("/api/register", controller.Register)
 	app.Post("/api/login", controller.Login)
 	app.Post("/api/logout", controller.LogoutUser)
+	app.Post("/api/execute", controller.ExecuteCommand)
 	app.Use(middleware.IsAuthenticated)
 
 	app.Post("/api/addserver", controller.AddServer)
 	app.Get("/api/getservers", controller.GetServers)
-	app.Post("/api/execute", controller.ExecuteCommand)
   app.Delete("/api/deleteserver/:id", controller.DeleteServer)
 }
