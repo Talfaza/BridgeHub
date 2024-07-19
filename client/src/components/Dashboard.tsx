@@ -1,6 +1,7 @@
-import React, { useState } from "react";
-import { Dock, DockIcon } from "@/components/magicui/dock";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Dock, DockIcon } from "@/components/magicui/dock";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
 import {
   Alert,
@@ -22,8 +31,6 @@ import {
 import { AddServerSucces } from "./notifications/ServerCardNotification";
 import { CommandsManage } from "./CommandsManage";
 
-export type IconProps = React.HTMLAttributes<SVGElement>;
-
 export function Dashboard() {
   const [name, setName] = useState("");
   const [hostname, setHostname] = useState("");
@@ -32,7 +39,9 @@ export function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-  const [showCommands, setShowCommands] = useState(false); 
+  const [showCommands, setShowCommands] = useState(false);
+  const [servers, setServers] = useState([]);
+  const [selectedServer, setSelectedServer] = useState(null);
   const navigate = useNavigate();
 
   const handleAddServer = async () => {
@@ -61,9 +70,8 @@ export function Dashboard() {
         setIp("");
         setPassword("");
         setShowSuccessAlert(true);
-        setTimeout(() => {
-          setShowSuccessAlert(false);
-        }, 3000);
+        fetchServers();
+        
       } else {
         console.error("Failed to add server");
       }
@@ -98,6 +106,31 @@ export function Dashboard() {
     }
   };
 
+  const fetchServers = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/getservers", {
+        withCredentials: true,
+      });
+      if (response.status === 200) {
+        setServers(response.data.servers);
+      } else {
+        console.error("Failed to fetch servers");
+      }
+    } catch (error) {
+      console.error("Error fetching servers:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchServers();
+  }, []);
+
+  const handleServerSelect = (server) => {
+    setSelectedServer(server);
+    setShowCommands(true);
+    localStorage.setItem("selectedServerId", server.id);
+  };
+
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="relative flex flex-col items-center justify-center w-full max-w-[40rem] overflow-hidden rounded-lg bg-background p-8">
@@ -114,9 +147,15 @@ export function Dashboard() {
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
+                  
                   <DialogTitle>Add Server:</DialogTitle>
                   <DialogDescription>
                     <br />
+                     {showSuccessAlert && (
+                      <AddServerSucces/>
+                    )}
+
+                      <br/>
                     <div className="space-y-1">
                       <Label htmlFor="name" className="text-white">
                         Name:
@@ -156,26 +195,30 @@ export function Dashboard() {
                         onChange={(e) => setIp(e.target.value)}
                         className="text-white"
                       />
-
                       <br />
+
                       <Label htmlFor="password" className="text-white">
                         Password:
                       </Label>
                       <Input
                         type="password"
                         id="password"
-                        placeholder="***********"
+                        placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="text-white"
                       />
-
                       <br />
 
-                      <Button onClick={handleAddServer} disabled={loading}>
-                        {loading ? "Adding Server..." : "Add Server !"}
+                      <Button
+                        type="submit"
+                        onClick={handleAddServer}
+                        disabled={loading}
+                      >
+                        {loading ? "Adding Server..." : "Add Server"}
                       </Button>
                     </div>
+                   
                   </DialogDescription>
                 </DialogHeader>
               </DialogContent>
@@ -187,32 +230,47 @@ export function Dashboard() {
             </button>
           </DockIcon>
           <DockIcon>
-        <button onClick={() => setShowCommands(prev => !prev)}>
-          <Icons.manage className="h-6 w-6" />
-        </button>
-      </DockIcon>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button>
+                  <Icons.manage className="h-6 w-6" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>Manage Servers:</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup>
+                  {servers.map((server) => (
+                    <DropdownMenuRadioItem
+                      key={server.id}
+                      value={server.id}
+                      onClick={() => handleServerSelect(server)}
+                    >
+                      {server.name}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </DockIcon>
           <DockIcon>
             <button onClick={handleLogout}>
               <Icons.logout className="h-6 w-6" />
             </button>
           </DockIcon>
         </Dock>
+        {showLogoutAlert && (
+          <Alert>
+            <CheckCircledIcon className="h-4 w-4" />
+            <AlertTitle>Logged Out Successfully!</AlertTitle>
+            <AlertDescription>Goodbye!</AlertDescription>
+          </Alert>
+        )}
       </div>
-      {showSuccessAlert && <AddServerSucces />}
-      {showLogoutAlert && (
-        <Alert className="fixed top-4 right-4 max-w-xs p-4 flex items-center">
-          <CheckCircledIcon className="h-4 w-4 mr-2" />
-          <div>
-            <AlertTitle className="font-semibold text-sm">Logout :</AlertTitle>
-            <AlertDescription className="text-xs">You Will Be Redirected !</AlertDescription>
-          </div>
-        </Alert>
-      )}
-      {showCommands && <CommandsManage />}
+      {showCommands && <CommandsManage server={selectedServer} />}
     </div>
   );
 }
-
 const Icons = {
   add: (props: IconProps) => (
     <svg
