@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,8 +18,41 @@ interface DialogRmdirProps {
 }
 
 export function DialogRmdir({ open, setOpen, onCancel }: DialogRmdirProps) {
+  const [directoryName, setDirectoryName] = useState("");
+  const [selectedServerId, setSelectedServerId] = useState<number | null>(null);
 
-  const handleDelete = () => {
+  useEffect(() => {
+    const storedServerId = localStorage.getItem("selectedServerId");
+    if (storedServerId) {
+      setSelectedServerId(parseInt(storedServerId, 10));
+    }
+  }, []);
+
+  const handleDelete = async () => {
+    if (directoryName.trim() !== "" && selectedServerId !== null) {
+      try {
+        const response = await fetch("http://localhost:3000/api/execute", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            server_id: selectedServerId,
+            command: `rm -r ${directoryName}`,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          console.log("Directory deleted successfully", data.output);
+        } else {
+          console.error("Failed to delete directory", data.error);
+        }
+      } catch (error) {
+        console.error("Error deleting directory:", error);
+      }
+    }
     setOpen(false);
   };
 
@@ -37,15 +70,15 @@ export function DialogRmdir({ open, setOpen, onCancel }: DialogRmdirProps) {
           <Input
             id="directoryName"
             placeholder="Directory Name"
+            value={directoryName}
+            onChange={(e) => setDirectoryName(e.target.value)}
           />
         </div>
         <AlertDialogFooter>
           <Button variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button  onClick={handleDelete}>
-           Delete 
-          </Button>
+          <Button onClick={handleDelete}>Delete</Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
