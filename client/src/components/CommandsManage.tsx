@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import{ useState } from "react";
 import {
   CardStackPlusIcon,
   CardStackMinusIcon,
@@ -9,8 +8,6 @@ import {
   FileMinusIcon,
   StackIcon,
   LayersIcon,
-  Pencil1Icon,
-  PersonIcon,
 } from "@radix-ui/react-icons";
 
 import {
