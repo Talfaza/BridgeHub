@@ -1,7 +1,6 @@
 # BridgeHub : Web App To Control Remote Sever
 
 ## Tech Stack : 
-- **Frontend :** Tailwind,MagicUI, Bulma(eventually)
+- **Frontend :** Tailwind,MagicUI
 - **Backend :** Golang 
-- **API :** -
 - **Database :** Mysql
